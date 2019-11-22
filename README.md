@@ -1,37 +1,104 @@
-## Welcome to GitHub Pages
+# Number To Word Generator
 
-You can use the [editor on GitHub](https://github.com/shiva6318/number_to_word_generator/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+This Project is used to generate possible words or combination of words from provided dictionary file for given 10 digit 
+phone number.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Getting Started
 
-### Markdown
+Number to word generator project is written in erlang and elixir language.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Prerequisites
 
-```markdown
-Syntax highlighted code block
+To use this project. You should install
+* Erlang
+* Elixir
 
-# Header 1
-## Header 2
-### Header 3
+### How to Install 
 
-- Bulleted
-- List
+* Ubuntu 14.04/16.04/17.04/18.04/19.04 or Debian 7/8/9
 
-1. Numbered
-2. List
+```
+1. Add Erlang Solutions repo: wget https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb && sudo dpkg -i erlang-solutions_2.0_all.deb
+2. Run: sudo apt-get update
+3. Install the Erlang/OTP platform and all of its applications: sudo apt-get install esl-erlang
+4. Install Elixir: sudo apt-get install elixir
+```
+### Clone Project from Git
 
-**Bold** and _Italic_ and `Code` text
+First open terminal, Press *Ctrl + Alt + t* 
 
-[Link](url) and ![Image](src)
+```
+git clone https://github.com/shiva6318/number_to_word_generator.git
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### Compile and Run
 
-### Jekyll Themes
+After cloning the project, Enter into the project, compile and run by below steps:
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/shiva6318/number_to_word_generator/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+* To Enter into project 
+```
+cd number_to_world_generator
+```
+In the folder, there are four files
+1) **README.md** - File which explains about project and how to install and use it
+2) **number_to_word_generator.erl** - Erlang file which will have functions to convert 10 digit phone number to possible words 
+or combination of word from provided dictionary file.
+3) **number_to_word_generator.ex** - Elixir file which will have functions to convert 10 digit phone number to possible words 
+or combination of word from provided dictionary file.
+4) **dictionary.txt** - Text file which have words for A to Z alphabets and it is used by erlang and elixir file to generator possible words for given number.
 
-### Support or Contact
+* To Compile and Run in erlang use below steps:
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+1. To get erlang shell
+```
+erl
+
+  Erlang/OTP 19 [erts-9.2] [source-f9282c6] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+  Eshell V9.2  (abort with ^G)
+  1> 
+```
+2. To compile
+```
+2> c(number_to_word_generator).
+{ok,number_to_word_generator}
+```
+3. Run the file
+```
+3> number_to_word_generator:get_all_valid_words_from_number(2282668687).
+ok
+Possible_words_list:[["act","amounts"],
+                     ["act","contour"],
+                     ["bat","amounts"],
+                     ["bat","contour"],
+                     ["cat","amounts"],
+                     ["cat","contour"],
+                     ["acta","mounts"],
+                     "catamounts"]
+```
+
+* To Compile and Run in Elixir use below steps:
+
+1. To get Elixir shell
+```
+iex
+
+Erlang/OTP 20 [erts-9.2] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:10] [kernel-poll:false]
+
+Interactive Elixir (1.3.3) - press Ctrl+C to exit (type h() ENTER for help)
+iex(1)> 
+```
+2. To compile
+```
+iex(2)>  c("number_to_word_generator.ex")
+[Number_to_word_generator]
+```
+3. Run the file
+```
+3> Number_to_word_generator.get_all_valid_words_from_number(2282668687).
+:ok
+Possible_words_list [["act", "amounts"], ["act", "contour"], ["bat", "amounts"], ["bat", "contour"], ["cat", "amounts"], ["cat", "contour"], ["acta", "mounts"], "catamounts"]
+```
+
+
+
+
