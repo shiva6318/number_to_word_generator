@@ -23,7 +23,7 @@
 %% ==================================================================
 
 -export([ get_all_valid_words_from_number/1,
-          number_to_word_mapper/3,
+          number_to_word_mapper/2,
           extract_valid_words_from_dictionary_list/4
         ]).
 
@@ -52,8 +52,6 @@
 
 get_all_valid_words_from_number( Ten_number ) ->
 
-	AA = erlang:now(),
-
 	Valid_words_dictionary = dict:from_list([{2,["a","b","c"]},{3,["d","e","f"]},{4,["g","h","i"]},{5,["j","k","l"]},{6,["m","n","o"]},{7,["p","q","r","s"]},{8,["t","u","v"]},{9,["w","x","y","z"]}]),
 	
 	List_of_words_from_dictionary = read_dictionary_file("dictionary.txt"), 
@@ -73,7 +71,7 @@ get_all_valid_words_from_number( Ten_number ) ->
 	   	
 	   	Alphabets_respective_to_digits = lists:foldl(Function,[], Ten_Digits_list),
 	
-		spawn(?MODULE,number_to_word_mapper,[AA,Alphabets_respective_to_digits, List_of_words_from_dictionary]),
+		spawn(?MODULE,number_to_word_mapper,[Alphabets_respective_to_digits, List_of_words_from_dictionary]),
 	
 		ok;
 	   _Any_thing ->
@@ -238,13 +236,13 @@ extract_valid_words_from_dictionary_list(Number, First_list_of_number, [Head_of_
 %%          ["bat", "amounts"], ["bat", "contour"], 
 %%          ["acta", "mounts"], "catamounts"]
 %% 
-%% @spec number_to_word_mapper(  tuple(),list(),list() ) -> list()
+%% @spec number_to_word_mapper(  list(),list() ) -> list()
 %%
 %% @end
 %% -----------------------------------------------------------------------------
--spec( number_to_word_mapper( tuple(),list(),list() ) -> list() ).
+-spec( number_to_word_mapper( list(),list() ) -> list() ).
 
-number_to_word_mapper(Time,Alphabets_respective_to_digits, List_of_words_from_dictionary) ->
+number_to_word_mapper(Alphabets_respective_to_digits, List_of_words_from_dictionary) ->
 
 	Function_to_find_valid_words = 
 		fun(Number, Accumulator) ->
@@ -303,8 +301,6 @@ number_to_word_mapper(Time,Alphabets_respective_to_digits, List_of_words_from_di
 		 end,
 		Possible_words_list = lists:foldl(Function,[],List_of_key++[{10,Rpc_key1,Rpc_key2,Rpc_key3}]),
 		io:format("Possible_words_list:~p~n",[Possible_words_list]),
-		End_time =erlang:now(),
-		io:format("End time ~p~nDiff:~p~n",[BB,timer:now_diff(End_time,Time)]),
 		Possible_words_list.
 	
 	
