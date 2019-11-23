@@ -1,9 +1,10 @@
+
 defmodule Number_to_word_generator do
+  
   @moduledoc """
   Module contain function to generator the possible words
   from given ten digit number using provided Dictionary file
   """
-  @moduledoc since: "1.0.0"
 
   @doc """
   This function get all possible words 
@@ -24,17 +25,14 @@ defmodule Number_to_word_generator do
       ["acta", "mounts"], "catamounts"]
 
   """
-  @doc since: "1.0.0"
-  @spec get_all_valid_words_from_number(ten_number) :: integer()
+  @spec get_all_valid_words_from_number(integer()) :: integer()
   
   def get_all_valid_words_from_number( ten_number ) do
 
 	valid_words_dictionary = %{2 => ["a","b","c"], 3 => ["d","e","f"], 4 => ["g","h","i"], 5 => ["j","k","l"], 6 => ["m","n","o"], 7 => ["p","q","r","s"], 8 => ["t","u","v"], 9 => ["w","x","y","z"]} ## map  used.
 	
 	list_of_words_from_dictionary = read_dictionary_file("dictionary.txt") 
-	
-#	IO.puts("list #{list_of_words_from_dictionary}")
-	
+		
 	ten_Digits_list = split_phone_number_to_digits( ten_number )
 	
 	one_digit_bool = :lists.member(1,ten_Digits_list)
@@ -50,8 +48,6 @@ defmodule Number_to_word_generator do
 	   		   end
 	   	
 	   	alphabets_respective_to_digits = List.foldl(ten_Digits_list, [], function)
-	   	
-#	   	IO.puts("alphabets_respective_to_digits #{inspect alphabets_respective_to_digits}")
 	
 		spawn(Number_to_word_generator, :number_to_word_mapper,[alphabets_respective_to_digits, list_of_words_from_dictionary])
 	
@@ -64,7 +60,7 @@ defmodule Number_to_word_generator do
 	
    end
 ###################################################################################################  
-@doc """
+ @docp """
   This function reads whole file data and returns in a list
   
   ## Parameters
@@ -79,23 +75,16 @@ defmodule Number_to_word_generator do
        ["erlang", "is","a", "functional","language"]
 
   """
-  @doc since: "1.0.0"
+ 
   @spec read_dictionary_file( String.t() ) :: list()
   
    defp read_dictionary_file( file ) do
 
-	#{:ok, file_id} = File.open(file, [:read,:binary,:raw])
-	#size = :filelib.file_size( file )
-	#{:ok, data} = :file.pread( file_id, 0, size)
-	
-	{:ok, data} = File.read(file)
-	
+	{:ok, data} = File.read(file)	
 	String.split(String.downcase(data))
-#	IO.puts("data #{a}")
-	#:string.tokens(:erlang.binary_to_list(data), '\n')
    end
 ###################################################################################################  
-  @doc """
+  @docp """
   This function splits the Number into indiviual digits
   
   ## Parameters
@@ -110,7 +99,7 @@ defmodule Number_to_word_generator do
        [2,2,8,8,6,8,7,9,6,4]
 
   """
-  @doc since: "1.0.0"
+  
   @spec split_phone_number_to_digits( integer() ) :: list()
 
    defp split_phone_number_to_digits( ten_number ) do
@@ -124,7 +113,6 @@ defmodule Number_to_word_generator do
 	
    defp split_phone_number_to_digits(ten_number, accumulator) do
 
-	IO.puts "accumulator #{accumulator}"
 	split_phone_number_to_digits( div(ten_number, 10), [ rem(ten_number, 10) | accumulator])
    end
    
@@ -146,7 +134,7 @@ defmodule Number_to_word_generator do
        ["abcf","abde","abeh",...]
 
   """
-  @doc since: "1.0.0"
+#  @doc since: "1.0.0"
   @spec validate_word_presence_in_dictionary_list( integer(),list(),list() ) :: list()
    
  def validate_word_presence_in_dictionary_list(number, word_to_find, list_of_words_from_dictionary) do
@@ -192,7 +180,7 @@ defmodule Number_to_word_generator do
        ["noun","onto","moto",...]
 
   """
-  @doc since: "1.0.0"
+#  @doc since: "1.0.0"
   @spec extract_valid_words_from_dictionary_list( integer(),list(),list(),list() ) :: list()
 
  def extract_valid_words_from_dictionary_list(_number,_first_list_of_number, [], []) do
@@ -213,15 +201,15 @@ defmodule Number_to_word_generator do
  def extract_valid_words_from_dictionary_list(number, first_list_of_number, [head_of_remaining_list | tail_of_remaining_list], list_of_words_from_dictionary) do
 
 	 combination_of_alphabets_list =  for alphabet1 <- first_list_of_number, alphabet2 <- head_of_remaining_list, do: Enum.join([alphabet1,alphabet2],"") 
-
+	
 	 function = fn(word_from_combination_list, acc) ->
-
+	
 		 acc ++ validate_word_presence_in_dictionary_list(number,word_from_combination_list, list_of_words_from_dictionary)
 		
 		end
 		
 	 valid_words_list_from_dictionary = List.foldl(combination_of_alphabets_list, [], function)
- #	IO.puts("valid_words_list_from_dictionary #{inspect valid_words_list_from_dictionary}")	
+	
 	 extract_valid_words_from_dictionary_list(number, combination_of_alphabets_list, tail_of_remaining_list, valid_words_list_from_dictionary)
    end
    
@@ -247,7 +235,7 @@ defmodule Number_to_word_generator do
        ["acta", "mounts"], "catamounts"]
 
   """
-  @doc since: "1.0.0"
+#  @doc since: "1.0.0"
   @spec number_to_word_mapper( list(), list() ) :: list()
   
  def number_to_word_mapper( alphabets_respective_to_digits, list_of_words_from_dictionary) do
@@ -256,24 +244,21 @@ defmodule Number_to_word_generator do
 		fn(number, accumulator) ->
 		
 			{first_number_alphabets_list,remaining_number_alphabets_list } = Enum.split(alphabets_respective_to_digits, number)
-		
-		#	IO.puts("first_number_alphabets_list #{inspect first_number_alphabets_list},remaining_number_alphabets_list #{inspect remaining_number_alphabets_list }")
+
 			{[head_of_first_number_alphabets_list],tail_of_first_number_alphabets_list } = Enum.split( first_number_alphabets_list, 1)
 			{[head_of_remaining_number_alphabets_list],tail_of_remaining_number_alphabets_list }= Enum.split( remaining_number_alphabets_list,1)
-	#		IO.puts("came #{number} head #{inspect head_of_first_number_alphabets_list} tail #{ inspect tail_of_first_number_alphabets_list} ")
+
 			task_key1 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, 
 					 [number, head_of_first_number_alphabets_list,tail_of_first_number_alphabets_list,list_of_words_from_dictionary])
 	
 			task_key2 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, 
 					 [(10-number), head_of_remaining_number_alphabets_list,tail_of_remaining_number_alphabets_list,list_of_words_from_dictionary])
-		
-		
+				
 		accumulator ++[{number, task_key1,task_key2}]
 	    end
 		
 	list_of_key = List.foldl([3,4,5,6,7],[],function_to_find_valid_words)
 	
-#	IO.puts("near 10 list_of_key ")
 	## for 10digits word 
 	{[first_number_list], remaining_number_lists} = Enum.split(alphabets_respective_to_digits,1)
 	
@@ -287,17 +272,17 @@ defmodule Number_to_word_generator do
 			
 			case key_tuple do
 			   {_number,key1, key2 } ->
-			   	#IO.puts("key1 #{ inspect key1}, key2 #{inspect key2}")
+
 				task1_result = Task.await(key1,:infinity)
 				task2_result = Task.await(key2,:infinity)
-				#IO.puts("task1_result #{inspect task1_result} task2_result #{inspect task2_result}")
+
 				cond do
 				
 				(task1_result == []) or (task2_result == []) 
 					->
 					  acc
 				   true ->
-				   	acc ++ for  element1 <- task1_result, element2 <-task2_result, do: [String.downcase(element1),String.downcase(element2)]
+				   	acc ++ for  element1 <- task1_result, element2 <-task2_result, do: [element1,element2]
 				 end
 		          {_number,task1,task2, task3} ->
 			 
@@ -314,8 +299,6 @@ defmodule Number_to_word_generator do
 		
 		IO.puts "Possible_words_list #{inspect possible_words_list}"
 
-##		BB =erlang:now()
-##		io:format("End time ~p~nDiff:~p~n",[BB,timer:now_diff(BB,AA)])
 		possible_words_list
     end
     
