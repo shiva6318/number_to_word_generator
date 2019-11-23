@@ -37,7 +37,7 @@
 %%
 %% Function has one argument
 %%
-%%	Argument 1 : Ten number
+%%  Argument 1 : Interger represent Ten digit number
 %%  Eg : 2282968566
 %%
 %% Return values :  
@@ -84,7 +84,7 @@ get_all_valid_words_from_number( Ten_number ) ->
 %%
 %% Function has one argument
 %%
-%%	Argument 1 : File name
+%%  Argument 1 : File name
 %%  Eg : "dictionary.txt"
 %%
 %% Return values :  list of words from file
@@ -101,7 +101,7 @@ read_dictionary_file(File) ->
 	{ok, File_id} = file:open(File, [read,binary,raw]),
 	Size = filelib:file_size(File), 
 	{ok, Data} = file:pread(File_id, 0, Size),
-	string:tokens(binary_to_list(Data), "\n").
+	string:tokens(string:to_lower(binary_to_list(Data)), "\n").
 	
 
 %%------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ read_dictionary_file(File) ->
 %%
 %% Function has one argument
 %%
-%%	Argument 1 : Ten digit number
+%%  Argument 1 : Ten digit number
 %%  Eg : 2288687964
 %%
 %% Return values :  list of digits
@@ -137,11 +137,11 @@ split_phone_number_to_digits(Ten_number, Accumulator) ->
 %%
 %% Function has three argument
 %%
-%%	Argument 1 :  number to find words length
+%%  Argument 1 :  number to find words length
 %%  Eg : 3 or 4 or 7 ..
-%%	Argument 2 : word to find in dictionary
+%%  Argument 2 : word to find in dictionary
 %%  Eg : "onto"
-%%	Argument 3 : dictionary words in list
+%%  Argument 3 : dictionary words in list
 %%  Eg : ["AA","AMN","AMNY"......]
 %%
 %% Return values :  list of word which is matched with dictionary
@@ -157,7 +157,7 @@ validate_word_presence_in_dictionary_list(Number, Word_to_find, List_of_words_fr
 	
 	Function = fun(Word_from_dictionary, Accumulator) ->
 	
-		case lists:prefix(string:to_upper(Word_to_find), Word_from_dictionary)  of
+		case lists:prefix(Word_to_find, Word_from_dictionary)  of
 			true when erlang:length(Word_from_dictionary) ==Number->
 				Accumulator ++ [Word_from_dictionary];
 			true ->
@@ -174,14 +174,14 @@ validate_word_presence_in_dictionary_list(Number, Word_to_find, List_of_words_fr
 %%
 %% Function has four argument
 %%
-%%	Argument 1 :  number to find words length
-%%  Eg : 3 or 4 or 7 ..
-%%	Argument 2 : Combination of word
-%%  Eg : "ont"
-%%	Argument 3 : remaining list of word
-%%  Eg : [["m","n","o"],["a","b","c"]]
-%%	Argument 4 :  list of word which is matched with dictionary
-%%  		Eg: ["ONTO","NOUN",....]
+%%  Argument 1 :  number to find words length
+%%   Eg : 3 or 4 or 7 ..
+%%  Argument 2 : Combination of word
+%%   Eg : "ont"
+%%  Argument 3 : remaining list of word
+%%   Eg : [["m","n","o"],["a","b","c"]]
+%%  Argument 4 :  list of word which is matched with dictionary
+%%  	Eg: ["ONTO","NOUN",....]
 %%
 %% Return values :  valid words from dictionary
 %%  		Eg: ["ONTO","NOUN",....]
@@ -224,12 +224,12 @@ extract_valid_words_from_dictionary_list(Number, First_list_of_number, [Head_of_
 %%
 %% Function has three argument
 %%
-%%	Argument 1 : time 
-%%  Eg : {15651,155565,15416166}
-%%	Argument 2 : List with aplhabets for digits
-%%  Eg : [["m","n","o"],["a","b","c"].....]
-%%	Argument 3 : dictionary words in list
-%%  Eg : ["AA","AMN","AMNY"......]
+%%  Argument 1 : time 
+%%   Eg : {15651,155565,15416166}
+%%  Argument 2 : List with aplhabets for digits
+%%   Eg : [["m","n","o"],["a","b","c"].....]
+%%  Argument 3 : dictionary words in list
+%%   Eg : ["AA","AMN","AMNY"......]
 %%
 %% Return values : possible words for given number
 %%  		Eg: [["act", "amounts"], ["act", "contour"], 
@@ -287,7 +287,7 @@ number_to_word_mapper(Alphabets_respective_to_digits, List_of_words_from_diction
 					->
 					  ACC;
 				   true ->
-				   	ACC ++ [[string:to_lower(X),string:to_lower(Y)] || X<-Key1_Result,Y<-Key2_Result]
+				   	ACC ++ [[X,Y] || X<-Key1_Result,Y<-Key2_Result]
 				 end;
 		          {_Number,Key1,Key2, Key3} ->
 			 
