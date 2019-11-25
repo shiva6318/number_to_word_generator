@@ -28,7 +28,13 @@ To use this project. You should install
 First open terminal, Press *Ctrl + Alt + t* 
 
 ```
-git clone https://github.com/shiva6318/number_to_word_generator.git
+shiva@shiva:~/Desktop$ git clone https://github.com/shiva6318/number_to_word_generator.git
+Cloning into 'number_to_word_generator'...
+remote: Enumerating objects: 38, done.
+remote: Counting objects: 100% (38/38), done.
+remote: Compressing objects: 100% (33/33), done.
+remote: Total 38 (delta 13), reused 11 (delta 2), pack-reused 0
+Unpacking objects: 100% (38/38), done.
 ```
 
 ### Compile and Run
@@ -37,7 +43,8 @@ After cloning the project, Enter into the project, compile and run by below step
 
 * To Enter into project 
 ```
-cd number_to_world_generator
+shiva@shiva:~/Desktop$ cd number_to_world_generator
+shiva@shiva:~/number_to_word_generator$
 ```
 In the folder, there are four files
 
@@ -52,9 +59,10 @@ or combination of word from provided dictionary file.
 
 1. To get erlang shell
 ```
-  shiva@shiva:~/Desktop$ erl
+  shiva@shiva:~/number_to_word_generator$ erl
 
-  Erlang/OTP 19 [erts-9.2] [source-f9282c6] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+  Erlang/OTP 20 [erts-9.2] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:10] [kernel-poll:false]
+  
   Eshell V9.2  (abort with ^G)
   1> 
 ```
@@ -81,7 +89,7 @@ Possible_words_list:[["act","amounts"],
 
 1. To get Elixir shell
 ```
-shiva@shiva:~/Desktop$ iex
+shiva@shiva:~/number_to_word_generator$ iex
 
 Erlang/OTP 20 [erts-9.2] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:10] [kernel-poll:false]
 
@@ -105,7 +113,6 @@ Possible_words_list [["act", "amounts"], ["act", "contour"], ["bat", "amounts"],
 * To test the project using ExUnit:
 
 1) Open terminal in project directory and type below command
-
 ```
 shiva@shiva:~/number_to_word_generator$ elixir -r number_to_word_generator.ex number_to_word_generator_test.exs
 ..
@@ -120,7 +127,7 @@ Randomized with seed 288247
 ## Design and Issues:
 
 Project aim is to get all possible combination of words from provided dictionary for any given 10digit
-phone number. Some Condition are there for project like word should be alteast contain 3 letters, 
+phone number. Some Conditions are there for the project like word should be alteast contain 3 letters, 
 output should be displayed in 1000ms and code should be written in elixir. 
 
 First I started working on generating the required output in erlang because i dont have experience in Elixir.
@@ -130,19 +137,16 @@ be taken and form order based on word length and displayed as output. But proble
 more than one minute time.
 
 Lets see how i sloved that, I started working how to display the output in 1000ms. I have analysed the code then i found the
-problem. That is because of multiple loop  for generate 3 to 10 letter words from dictionary list.
-every time we are scanning the list and extracting the valid words. So i thought, i will scan the list
+problem. That is because of multiple loop for generate 3 to 10 letter words from dictionary list in sequence order.
+every time we are scanning the list and extracting the valid words one by one. So i thought, i will scan the list
 parallel for every number i.e, 3 to 10. Then i used rpc async call to do that. Even though displaying 
-output is taking 25 seconds. Again i have analysed the time taken by each number then i found that 10 
+output is taking 25 seconds. Again i have analysed the time taken by each number then I found that 10 
 letter word scaning is taking more time. So i splitted the scanning of 10letter word into 3 async call
 then displaying output is within 1000ms. The project is completed in erlang but it should be in elixir.
 
 Then I started learning basics of elixir and started converting the erlang code into elixir. The displaying 
 output is same using elixir code but time taken is 20seconds. i tired to reduce the time to display
-the output but i didnt succeded. I have attached erlanng code, elixir code and test file in the project.
+the output but i didnt succeded even though i am trying to do that by understanding the elixir implementation. I have attached the erlang code, elixir code and test file in the project.
 Added READme file for reference to install, execute and use the project. 
  
-  
-
-
 
