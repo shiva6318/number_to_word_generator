@@ -260,13 +260,35 @@ defmodule Number_to_word_generator do
 	list_of_key = List.foldl([3,4,5,6,7],[],function_to_find_valid_words)
 	
 	## for 10digits word 
+	
 	{[first_number_list], remaining_number_lists} = Enum.split(alphabets_respective_to_digits,1)
 	
-	task_key11 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, [10, Enum.take(first_number_list,1), remaining_number_lists, list_of_words_from_dictionary])
+      keys_for_10_word = 
+	case first_number_list do
+		[first_letter, second_letter,third_letter] -> # if number have 3 letters
 	
-	task_key12 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, [10,Enum.take(first_number_list,2), remaining_number_lists, list_of_words_from_dictionary])
+			task_key11 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, [10, [first_letter], remaining_number_lists, list_of_words_from_dictionary])
 	
-	task_key13 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, [10,Enum.take(first_number_list,3), remaining_number_lists, list_of_words_from_dictionary])
+			task_key12 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, [10, [second_letter], remaining_number_lists, list_of_words_from_dictionary])
+	
+			task_key13 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, [10, [third_letter], remaining_number_lists, list_of_words_from_dictionary])
+			
+			[{10,task_key11,task_key12,task_key13}]
+			
+	       [first_letter, second_letter,third_letter,fourth_letter] -> if number have 4 letters
+	       
+			task_key11 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, [10, [first_letter], remaining_number_lists, list_of_words_from_dictionary])
+	
+			task_key12 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, [10, [second_letter], remaining_number_lists, list_of_words_from_dictionary])
+	
+			task_key13 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, [10, [third_letter], remaining_number_lists, list_of_words_from_dictionary])
+
+			task_key14 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, [10, [fourth_letter], remaining_number_lists, list_of_words_from_dictionary])
+
+			[{10,task_key11,task_key12,task_key13, task_key14}]
+ 
+	end
+	
 	
 	function = fn(key_tuple, acc)->
 			
@@ -291,11 +313,20 @@ defmodule Number_to_word_generator do
 				task13_result = Task.await(task3,:infinity)
 				
 				acc ++task11_result++task12_result++task13_result
+				
+			  {_number,task1,task2, task3, task4} ->
+			 
+			 	task11_result = Task.await(task1,:infinity)
+				task12_result = Task.await(task2,:infinity)
+				task13_result = Task.await(task3,:infinity)
+				task14_result = Task.await(task4,:infinity)
+
+				acc ++task11_result++task12_result++task13_result++task14_result
 			end
 		 
 		 end
 		 
-		possible_words_list = List.foldl(list_of_key++[{10,task_key11,task_key12,task_key13}], [], function)
+		possible_words_list = List.foldl(list_of_key++keys_for_10_word, [], function)
 		
 		IO.puts "Possible_words_list #{inspect possible_words_list}"
 
