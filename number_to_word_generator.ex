@@ -275,7 +275,7 @@ defmodule Number_to_word_generator do
 			
 			[{10,task_key11,task_key12,task_key13}]
 			
-	       [first_letter, second_letter,third_letter,fourth_letter] -> if number have 4 letters
+	       [first_letter, second_letter,third_letter,fourth_letter] -> #if number have 4 letters
 	       
 			task_key11 = Task.async( Number_to_word_generator, :extract_valid_words_from_dictionary_list, [10, [first_letter], remaining_number_lists, list_of_words_from_dictionary])
 	
