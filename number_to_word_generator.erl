@@ -266,15 +266,35 @@ number_to_word_mapper(Alphabets_respective_to_digits, List_of_words_from_diction
 	
 	
 	
-	
+	% 10letters word scanning
 	{[First_number_list], Remaining_number_lists} = lists:split(1,Alphabets_respective_to_digits),
 	
-
-	Rpc_key1 = rpc:async_call(node(), ?MODULE, extract_valid_words_from_dictionary_list, [10,[lists:nth(1,First_number_list)],Remaining_number_lists,List_of_words_from_dictionary]), 
+      Keys_for_10_word =
+	case First_number_list of
+	    
+	    [First_letter, Second_letter,Third_letter] -> % if number have 3 letters
 	
-	Rpc_key2 = rpc:async_call(node(), ?MODULE, extract_valid_words_from_dictionary_list, [10,[lists:nth(2,First_number_list)],Remaining_number_lists,List_of_words_from_dictionary]),
-	
-	Rpc_key3 = rpc:async_call(node(), ?MODULE, extract_valid_words_from_dictionary_list, [10,[lists:nth(3,First_number_list)],Remaining_number_lists,List_of_words_from_dictionary]),
+		Rpc_key1 = rpc:async_call(node(), ?MODULE, extract_valid_words_from_dictionary_list, [10,[First_letter],Remaining_number_lists,List_of_words_from_dictionary]), 
+		
+		Rpc_key2 = rpc:async_call(node(), ?MODULE, extract_valid_words_from_dictionary_list, [10,[Second_letter],Remaining_number_lists,List_of_words_from_dictionary]),
+		
+		Rpc_key3 = rpc:async_call(node(), ?MODULE, extract_valid_words_from_dictionary_list, [10,[Third_letter],Remaining_number_lists,List_of_words_from_dictionary]),
+	        
+	        [{10,Rpc_key1,Rpc_key2,Rpc_key3}];
+			
+	    [First_letter, Second_letter,Third_letter,Fourth_letter] -> % if number have 4 letters
+	    	
+	    	Rpc_key1 = rpc:async_call(node(), ?MODULE, extract_valid_words_from_dictionary_list, [10,[First_letter],Remaining_number_lists,List_of_words_from_dictionary]), 
+		
+		Rpc_key2 = rpc:async_call(node(), ?MODULE, extract_valid_words_from_dictionary_list, [10,[Second_letter],Remaining_number_lists,List_of_words_from_dictionary]),
+		
+		Rpc_key3 = rpc:async_call(node(), ?MODULE, extract_valid_words_from_dictionary_list, [10,[Third_letter],Remaining_number_lists,List_of_words_from_dictionary]),
+		
+		Rpc_key4 = rpc:async_call(node(), ?MODULE, extract_valid_words_from_dictionary_list, [10,[Fourth_letter],Remaining_number_lists,List_of_words_from_dictionary]),
+		
+		[{10,Rpc_key1,Rpc_key2,Rpc_key3, Rpc_key4}]
+	end,
+		
 	
 	Function = fun(Key_tuple, ACC)->
 	
@@ -295,11 +315,20 @@ number_to_word_mapper(Alphabets_respective_to_digits, List_of_words_from_diction
 				Key2_result = rpc:yield(Key2),
 				Key3_result = rpc:yield(Key3),
 				
-				ACC ++Key1_result++Key2_result++Key3_result
+				ACC ++Key1_result++Key2_result++Key3_result;
+			 
+			 {_Number,Key1,Key2, Key3, Key4} ->
+			 
+			 	Key1_result = rpc:yield(Key1),
+				Key2_result = rpc:yield(Key2),
+				Key3_result = rpc:yield(Key3),
+				Key4_result = rpc:yield(Key4),
+				
+				ACC ++Key1_result++Key2_result++Key3_result++Key4_result
 			end
 		 
 		 end,
-		Possible_words_list = lists:foldl(Function,[],List_of_key++[{10,Rpc_key1,Rpc_key2,Rpc_key3}]),
+		Possible_words_list = lists:foldl(Function,[],List_of_key++Keys_for_10_word ),
 		io:format("Possible_words_list:~p~n",[Possible_words_list]),
 		Possible_words_list.
 	
